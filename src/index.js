@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import store from './store';
 import {Provider} from 'react-redux';
-import {loadFeedList} from './actionCreators';
+import {loadFeedList, loadFeed} from './actionCreators';
 
 store.dispatch(loadFeedList())
 

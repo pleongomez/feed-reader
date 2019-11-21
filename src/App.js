@@ -5,6 +5,8 @@ import {Navbar} from 'react-bootstrap';
 import FeedList from './components/feedList';
 import FeedSearch from './components/feedSearch';
 import FeedDetail from './components/feedDetail';
+import {connect} from 'react-redux';
+
 
 class  App extends Component {
   render(){
@@ -34,4 +36,16 @@ class  App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state =>{
+  return{
+    
+  }
+}
+
+
+const mapDispatchToProps = dispatch => {
+  return {
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

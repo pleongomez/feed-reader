@@ -3,7 +3,11 @@ import { reducer as formReducer } from 'redux-form';
 import thunk from 'redux-thunk';
 
 const InitialState = {
-    feed: '',
+    isLoading: false,
+    isAdding: false,
+    feedLoaded: false,
+    isWrongOperation: false,
+    feed:'',
     feeds: []
 }
 
@@ -19,7 +23,8 @@ const feeds = (state = InitialState, action) =>{
     if(action.type === "ADD_FEED"){
         return {
             ...state,
-            feeds: state.feeds.concat(action.feed)
+            feeds: state.feeds.concat(action.feed),
+            isAdding: false
         };
     }
 
@@ -33,7 +38,39 @@ const feeds = (state = InitialState, action) =>{
     if(action.type === "LOAD_FEED"){
         return {
             ...state,
-            feed: state.feeds.find(p => p.id == action.feed.id)
+            feed: state.feeds.find(p => p.id == action.feed.id),
+            isLoading: false,
+            feedLoaded: true
+        };
+    }
+
+    if(action.type === "INIT_LOAD_FEED"){
+        return {
+            ...state,
+            isLoading: action.isLoading
+        };
+    }
+
+    if(action.type === "END_LOAD_FEED"){
+        return {
+            ...state,
+            isLoading: action.isLoading
+        };
+    }
+
+    if(action.type === "TOGGLE_ERROR"){
+        return {
+            ...state,
+            isWrongOperation: action.isWrongOperation,
+            isAdding: action.isAdding,
+            isLoading: action.isLoading
+        };
+    }
+
+    if(action.type === "INIT_ADD_FEED"){
+        return {
+            ...state,
+            isAdding: action.isAdding,
         };
     }
 
@@ -59,7 +96,7 @@ const rootReducer = combineReducers({
             return state;
         }
     })
-  })
+})
 
 let store = createStore(rootReducer,  applyMiddleware(logger, thunk));
 
