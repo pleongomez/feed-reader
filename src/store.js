@@ -1,6 +1,7 @@
 import {createStore, applyMiddleware, combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import thunk from 'redux-thunk';
+import { save, load } from "redux-localstorage-simple";
 
 const InitialState = {
     isLoading: false,
@@ -16,7 +17,12 @@ const feeds = (state = InitialState, action) =>{
     if(action.type === "GET_FEED_LIST"){
         return {
             ...state,
-            feeds: action.feeds
+            isLoading: false,
+            isAdding: false,
+            feedLoaded: false,
+            isWrongOperation: false,
+            isRemoving: false,
+            feed: {}
         };
     }
 
@@ -32,16 +38,28 @@ const feeds = (state = InitialState, action) =>{
         return {
             ...state,
             feeds: state.feeds.filter(p => p.id !== action.feed.id)
+            //isRemoving: false
         };
     }
 
     if(action.type === "LOAD_FEED"){
-        return {
-            ...state,
-            feed: state.feeds.find(p => p.id == action.feed.id),
-            isLoading: false,
-            feedLoaded: true
-        };
+
+        if(state.isRemoving){
+            return {
+                ...state,
+                feed: {},
+                isLoading: false,
+                feedLoaded: false,
+                isRemoving: false
+            }
+        }else{
+            return {
+                ...state,
+                feed: action.feed, //state.feeds.find(p => p.id == action.feed.id),
+                isLoading: false,
+                feedLoaded: true
+            };
+        }
     }
 
     if(action.type === "INIT_LOAD_FEED"){
@@ -54,7 +72,7 @@ const feeds = (state = InitialState, action) =>{
     if(action.type === "END_LOAD_FEED"){
         return {
             ...state,
-            isLoading: action.isLoading
+            isLoading: action.isLoading,
         };
     }
 
@@ -74,6 +92,13 @@ const feeds = (state = InitialState, action) =>{
         };
     }
 
+    if(action.type === "INIT_REMOVE_FEED"){
+        return {
+            ...state,
+            isRemoving: action.isRemoving,
+        };
+    }
+
     return state;
 };
 
@@ -88,9 +113,10 @@ const rootReducer = combineReducers({
     feeds,
     form: formReducer.plugin({
         contact: (state, action) =>{
-            if(action.type === "FORM_ADD"){
+            if(action.type === "FORM_RESET"){
                 return {
-                    ...state
+                    ...state,
+                    values: {url: ''}
                 };
             }
             return state;
@@ -98,6 +124,6 @@ const rootReducer = combineReducers({
     })
 })
 
-let store = createStore(rootReducer,  applyMiddleware(logger, thunk));
+let store = createStore(rootReducer, load({ feeds: ["feeds"] , form: {}}), applyMiddleware(logger, thunk, save()));
 
 export default store;

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {loadFeed, removeFeed} from '../actionCreators';
 import {connect} from 'react-redux';
 import ReactLoading from "react-loading";
+import {Card, CardDeck}  from 'react-bootstrap';
+import parse from 'html-react-parser';
 
 class FeedDetail extends Component  {
   
@@ -24,18 +26,32 @@ class FeedDetail extends Component  {
         <div >
           {!isLoading && (
             <div>
-                <span>{feed != undefined ? feed.title : 'No hay feed seleccionado'}</span>
+              <div class="page-header"><h1>{feed.title}</h1></div>
                 {feedLoaded && (
-                  feedList.map(feed => <span>{feed.title}</span>)
+                  <CardDeck>
+                    {feedList.map(feed => 
+                      <Card>
+                        {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
+                        <Card.Body>
+                          <Card.Title>{feed.title}</Card.Title>
+                          <Card.Text>
+                          {parse(feed.content)}
+                          </Card.Text>
+                        </Card.Body>
+                        <Card.Footer>
+                          <small className="text-muted">{feed.updated}</small>
+                        </Card.Footer>
+                        </Card>
+                        )
+                      }    
+                  </CardDeck>
                 )}
             </div>
-            
           )}
         </div>
-      </div>
+    </div>
     )
-  }
-    
+  } 
 }
 
 const mapStateToProps = state => {
