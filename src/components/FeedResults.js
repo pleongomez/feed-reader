@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import ReactLoading from "react-loading";
 import {Card, CardDeck}  from 'react-bootstrap';
 
-class FeedDetail extends Component  {
+class FeedResults extends Component  {
   
   constructor(props){
     super(props);
@@ -23,6 +23,14 @@ class FeedDetail extends Component  {
         </div>
 
         <div >
+          {!isLoading && !feedLoaded && (
+            <div>
+            <h1>No feed selected</h1>
+            </div>
+          )}
+        </div>
+
+        <div >
           {!isLoading && (
             <div>
               <div className="page-header"><h1>{feed.title}</h1></div>
@@ -30,11 +38,9 @@ class FeedDetail extends Component  {
                   <CardDeck>
                     {feedList.map(feed => 
                       <Card>
-                        {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
                         <Card.Body>
                           <Card.Title>{feed.title}</Card.Title>
                           <Card.Text dangerouslySetInnerHTML={{ __html: feed.content }}>
-                          {/* {parse(feed.content)} */}
                           </Card.Text>
                         </Card.Body>
                         <Card.Footer>
@@ -66,4 +72,4 @@ const mapDispatchToProps = dispatch => {
   return {}
 }
 
-export default connect(mapStateToProps,mapDispatchToProps) (FeedDetail);
+export default connect(mapStateToProps,mapDispatchToProps) (FeedResults);

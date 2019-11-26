@@ -4,7 +4,7 @@ import './App.css';
 import {Navbar} from 'react-bootstrap';
 import FeedList from './components/feedList';
 import FeedSearch from './components/feedSearch';
-import FeedDetail from './components/feedDetail';
+import FeedResults from './components/FeedResults';
 import {connect} from 'react-redux';
 
 
@@ -27,7 +27,7 @@ class  App extends Component {
               <FeedSearch/>
             </div>
             <div className="col-md-8">
-              <FeedDetail />
+              <FeedResults />
             </div>
           </div>
         </div>
